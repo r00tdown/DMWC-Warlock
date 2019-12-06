@@ -86,6 +86,11 @@ local function Defensive()
         ItemUsage = DMW.Time
         return true
     end
+    
+    if Setting("DeathCoil %") and Player.HP < Setting("DeathCoil HP") and Spell.DeathCoil:Cast(Target) then
+	return true
+    end
+    
      if Setting("Sacrifice") and Player.HP < Setting ("Sacrifice HP") and Pet and not Pet.Dead  and (GetPetActionInfo(4) == GetSpellInfo(3716)) and Spell.Sacrifice:Cast(Player) then
         return true
     end
@@ -194,7 +199,7 @@ end
 
 local function Dot()
     if (Player.Level - Target.Level) > 30 and not Target:IsBoss() and Target.CreatureType ~= "Totem" and Setting("Corruption") then
-        if (not Player.Moving or Talent.ImprovedCorruption.Rank == 5) and (not Spell.Corruption:LastCast() or (DMW.Player.LastCast[1].SuccessTime and (DMW.Time - DMW.Player.LastCast[1].SuccessTime) > 0.7) or not UnitIsUnit(Spell.Corruption.LastBotTarget, Target.Pointer)) and (Target.Facing or (Talent.ImprovedCorruption.Rank == 5 and DMW.Settings.profile.Enemy.AutoFace)) and not Debuff.Corruption:Exist(Target) and Spell.Corruption:Cast(Target) then
+        if (not Player.Moving or Talent.ImprovedCorruption.Rank == 5) and (not Spell.Corruption:LastCast() or (DMW.Player.LastCast[1].SuccessTime and (DMW.Time - DMW.Player.LastCast[1].SuccessTime) > 0.7) or not UnitIsUnit(Spell.Corruption.LastBotTarget, Target.Pointer)) and not Debuff.Corruption:Exist(Target) and Spell.Corruption:Cast(Target) then
             return true
         end
         return true
@@ -210,7 +215,7 @@ local function Dot()
             return true
         end
     end
-    if Setting("Corruption") and (not Player.Moving or Talent.ImprovedCorruption.Rank == 5) and (not Spell.Corruption:LastCast() or (DMW.Player.LastCast[1].SuccessTime and (DMW.Time - DMW.Player.LastCast[1].SuccessTime) > 0.7) or not UnitIsUnit(Spell.Corruption.LastBotTarget, Target.Pointer)) and Target.CreatureType ~= "Totem" and (Target.Facing or (Talent.ImprovedCorruption.Rank == 5 and DMW.Settings.profile.Enemy.AutoFace)) and not Debuff.Corruption:Exist(Target) and Target.TTD > 7 and Spell.Corruption:Cast(Target) then
+    if Setting("Corruption") and (not Player.Moving or Talent.ImprovedCorruption.Rank == 5) and (not Spell.Corruption:LastCast() or (DMW.Player.LastCast[1].SuccessTime and (DMW.Time - DMW.Player.LastCast[1].SuccessTime) > 0.7) or not UnitIsUnit(Spell.Corruption.LastBotTarget, Target.Pointer)) and Target.CreatureType ~= "Totem" and not Debuff.Corruption:Exist(Target) and Target.TTD > 7 and Spell.Corruption:Cast(Target) then
         return true
     end
     if (Setting("Immolate") or Spell.ShadowBolt:CD() > 2) and not Player.Moving and (not Spell.Immolate:LastCast() or (DMW.Player.LastCast[1].SuccessTime and (DMW.Time - DMW.Player.LastCast[1].SuccessTime) > 0.7) or not UnitIsUnit(Spell.Immolate.LastBotTarget, Target.Pointer)) and Target.CreatureType ~= "Totem" and Target.Facing and not Debuff.Immolate:Exist(Target) and Target.TTD > 10 and Spell.Immolate:Cast(Target) then
@@ -311,7 +316,7 @@ local function PvE()
         if Setting("Drain Life Filler") and not Player.Moving and Player.HP <= Setting("Drain Life Filler HP") and Target.CreatureType ~= "Mechanical" and (Target.Player or Target.TTD > 3) and Spell.DrainLife:Cast(Target) then
             return true
         end
-        if DMW.Player.Equipment[18] and Target.Facing and Wand() then
+        if Setting ("Wand On Off") and DMW.Player.Equipment[18] and Target.Facing and Wand() then
             return true
         end
     end
@@ -367,7 +372,11 @@ end
 
 function Warlock.Rotation()
     Locals()
+    
+    if not Player.Combat then
     OoC()
+	end
+    
     if Target and Target.ValidEnemy and Target.Distance < 40 then
         PvE()
     end
