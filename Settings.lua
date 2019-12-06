@@ -32,6 +32,7 @@ function Warlock.Settings()
     UI.AddTab("DPS")
     UI.AddToggle("Auto Pet Attack", "Auto cast pet attack on target", true)
     UI.AddToggle("Auto Attack In Melee", "Will use normal attack over wand if target is in melee range", false)
+    UI.AddToggle("Wand On Off", "Wand", nil, true)
     UI.AddDropdown("Shadow Bolt Mode", "Select Shadow Bolt mode", {"Disabled", "Always", "Only Nightfall"}, 2)
     UI.AddRange("Shadow Bolt Mana", "Minimum mana pct to cast Shadow Bolt", 0, 100, 1, 35)
     UI.AddToggle("Searing Pain", "Use Searing Pain when Shadow Bolt is disabled or not castable", false)
@@ -61,6 +62,10 @@ function Warlock.Settings()
     UI.AddRange("Health Funnel HP", "Pet HP to cast Health Funnel", 0, 100, 1, 20)
     UI.AddToggle("Sacrifice", "Activate Sacrifice", true)
     UI.AddRange("Sacrifice HP", "Player HP to cast Sacrifice", 0, 100, 1, 20)
+    
+    UI.AddToggle("DeathCoil %", "Auto Cast Deathcoil", nil, true)
+	UI.AddRange("DeathCoil HP", nil, 0, 100, 1, 50)
+    
     UI.AddToggle("Luffa", "Auto use luffa trinket", true)
     UI.AddToggle("Shadow Ward", "Auto cast shadow ward when targeting priest or warlock players", true)
 
